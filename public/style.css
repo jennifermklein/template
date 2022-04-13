@@ -1,0 +1,47 @@
+body {
+    background-color: rgb(221, 255, 242);
+    text-align: center;
+}
+
+.white {
+    background-color: ivory;
+    color: black;
+    height: 200px;
+    width: 40px;
+}
+
+.black {
+    background-color: black;
+    color: ivory;
+    height: 150px;
+    width: 36px;
+    margin: 0px -18px 0px -18px;
+    z-index: 1;
+}
+
+.key {
+    box-shadow: 1px 2px 1px rgba(100, 100, 85, 0.5);
+    border-radius: 2px 2px 4px 4px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.active, .key:active {
+    box-shadow: 1px 1px 1px rgba(100, 100, 85, 1);
+    border: 3px fuchsia solid;
+}
+
+button:focus {
+    outline: none;
+}
+
+.instrument {
+    display: flex;
+    justify-content: center;
+    padding: 50px;
+}
+
+canvas {
+    /* border: 1px black solid; */
+}
