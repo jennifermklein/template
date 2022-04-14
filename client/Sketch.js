@@ -1,67 +1,80 @@
 import React from "react";
 import paper from "paper";
-import { Point } from "paper/dist/paper-core";
 
 export default class Sketch extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       shape: "",
+      color: "",
     };
   }
   componentDidMount() {
     const color = this.props.color || "fuschia";
-    console.log(color);
     const canvas = document.getElementById("canvas");
-    console.log(canvas);
     paper.setup(canvas);
-
-    // const width = paper.view.size.width;
-    // const height = paper.view.size.height;
-    // const circle = new paper.Shape.Circle({
-    //   center: [width / 2, height / 2],
-    //   fillColor: color,
-    //   radius: width / 5,
-    // });
-    // paper.view.draw();
-    // this.setState({
-    //   shape: circle,
-    // });
 
     const width = paper.view.size.width;
     const height = paper.view.size.height;
-    const amt = 10;
-    const step = width / amt;
+    const amt = 20;
+    const step = width / (amt - 1);
 
     const line = new paper.Path({
       strokeColor: color,
-      strokeWidth: height / 10,
-      position: paper.view.center,
+      strokeWidth: 18,
+      strokeCap: "round",
     });
 
-    for (let i = 0; i <= amt; i++) {
-      line.add(new Point(i * step, 0));
+    for (let i = 0; i < amt; i++) {
+      line.add(new paper.Point(i * step, Math.random() * height * 0.6));
     }
-    paper.view.draw();
+
+    line.smooth();
     this.setState({
+      color: color,
       shape: line,
     });
   }
 
   componentDidUpdate() {
-    const newShape = this.state.shape;
-    newShape.fillColor = this.props.color;
-    newShape.strokeColor = this.props.color;
+    if (this.state.color != this.props.color) {
+      const newShape = this.state.shape;
+      const color = this.props.color;
+      newShape.strokeColor = color;
+      newShape.fillColor = "white";
 
-    const width = paper.view.size.width;
-    const height = paper.view.size.height;
-    const amt = 10;
-    const step = width / amt;
+      const width = paper.view.size.width;
+      const height = paper.view.size.height;
+      const amt = 20;
+      const step = width / (amt - 1);
 
-    for (let i = 1; i < amt; i++) {
-      newShape.segments[i].point = [i * step, Math.random() * height * 0.8];
+      const i = this.props.segment;
+      const y = newShape.segments[i].point._y;
+      const transform = Math.random() * 80 - 40;
+      const newY = Math.max(height * 0.3, Math.min(height * 7, y + transform));
+      if (newShape && newShape.segments[i]) {
+        newShape.segments[i].point = [i * step, newY];
+        const circle = new paper.Path.Circle(
+          new paper.Point(
+            newShape.segments[i].point._x + transform / 2,
+            newShape.segments[i].point._y
+          ),
+          9
+        );
+        circle.fillColor = color;
+        (circle.shadowColor = new paper.Color(0, 0, 0)),
+          // Set the shadow blur radius to 12:
+          (circle.shadowBlur = 3),
+          // Offset the shadow by { x: 5, y: 5 }
+          (circle.shadowOffset = new paper.Point(1, 1));
+      }
+
+      newShape.smooth();
+      this.setState({
+        color: color,
+        shape: newShape,
+      });
     }
-    newShape.smooth();
   }
 
   render() {

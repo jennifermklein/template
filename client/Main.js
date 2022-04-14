@@ -2,35 +2,36 @@ import React from "react";
 import * as Tone from "tone";
 import Paper from "paper";
 import Sketch from "./Sketch";
-import { Color } from "paper/dist/paper-core";
+import { Color, Gradient } from "paper/dist/paper-core";
 
 export default class Main extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      color: new Color(1, 0, 0.5),
+      color: new Color(0.5, 0.5, 0.5),
       synths: {},
+      segment: 0,
       keys: {
-        a: { note: "C4", color: "white", status: "" },
-        w: { note: "C#4", color: "black", status: "" },
-        s: { note: "D4", color: "white", status: "" },
-        e: { note: "D#4", color: "black", status: "" },
-        d: { note: "E4", color: "white", status: "" },
-        f: { note: "F4", color: "white", status: "" },
-        t: { note: "F#4", color: "black", status: "" },
-        g: { note: "G4", color: "white", status: "" },
-        y: { note: "G#4", color: "black", status: "" },
-        h: { note: "A4", color: "white", status: "" },
-        u: { note: "A#4", color: "black", status: "" },
-        j: { note: "B4", color: "white", status: "" },
-        k: { note: "C5", color: "white", status: "" },
-        o: { note: "C#5", color: "black", status: "" },
-        l: { note: "D5", color: "white", status: "" },
-        p: { note: "D#5", color: "black", status: "" },
-        ";": { note: "E5", color: "white", status: "" },
-        "'": { note: "F5", color: "white", status: "" },
-        "]": { note: "F#5", color: "black", status: "" },
-        Enter: { note: "G5", color: "white", status: "" },
+        a: { note: "C4", color: "white", status: "", segment: 0 },
+        w: { note: "C#4", color: "black", status: "", segment: 1 },
+        s: { note: "D4", color: "white", status: "", segment: 2 },
+        e: { note: "D#4", color: "black", status: "", segment: 3 },
+        d: { note: "E4", color: "white", status: "", segment: 4 },
+        f: { note: "F4", color: "white", status: "", segment: 5 },
+        t: { note: "F#4", color: "black", status: "", segment: 6 },
+        g: { note: "G4", color: "white", status: "", segment: 7 },
+        y: { note: "G#4", color: "black", status: "", segment: 8 },
+        h: { note: "A4", color: "white", status: "", segment: 9 },
+        u: { note: "A#4", color: "black", status: "", segment: 10 },
+        j: { note: "B4", color: "white", status: "", segment: 11 },
+        k: { note: "C5", color: "white", status: "", segment: 12 },
+        o: { note: "C#5", color: "black", status: "", segment: 13 },
+        l: { note: "D5", color: "white", status: "", segment: 14 },
+        p: { note: "D#5", color: "black", status: "", segment: 15 },
+        ";": { note: "E5", color: "white", status: "", segment: 16 },
+        "'": { note: "F5", color: "white", status: "", segment: 17 },
+        "]": { note: "F#5", color: "black", status: "", segment: 18 },
+        Enter: { note: "G5", color: "white", status: "", segment: 19 },
       },
     };
     this.clickHandler = this.clickHandler.bind(this);
@@ -63,6 +64,7 @@ export default class Main extends React.Component {
   async keyHandler(evt) {
     // return if key doesn't correspond to a note
     const key = evt.key;
+
     if (!(key in this.state.keys)) {
       return;
     }
@@ -76,13 +78,24 @@ export default class Main extends React.Component {
       }
       const synth = new Tone.Synth().toDestination();
       synth.triggerAttack(note);
+
+      const newColor = this.state.color;
+      const colorTrans = Math.random() / 2 - 0.25;
+
+      const whichColor = Math.floor(Math.random() * 3);
+      newColor.red += whichColor === 0 ? colorTrans : 0;
+      newColor.green += whichColor === 1 ? colorTrans : 0;
+      newColor.blue += whichColor === 2 ? colorTrans : 0;
+
       this.setState({
         synths: { ...this.state.synths, [note]: synth },
         keys: {
           ...this.state.keys,
-          [evt.key]: { ...this.state.keys[evt.key], status: "active" },
+          [key]: { ...this.state.keys[key], status: "active" },
         },
-        color: new Color(Math.random(), Math.random(), Math.random()),
+        color: new Color(newColor.red, newColor.green, newColor.blue),
+        // color: new Color(Math.random(), Math.random(), Math.random()),
+        segment: this.state.keys[key].segment,
       });
     }
     // release
@@ -91,11 +104,10 @@ export default class Main extends React.Component {
       this.setState({
         keys: {
           ...this.state.keys,
-          [evt.key]: { ...this.state.keys[evt.key], status: "" },
+          [key]: { ...this.state.keys[evt.key], status: "" },
         },
       });
     }
-    // console.log(this.state.color);
   }
 
   render() {
@@ -103,7 +115,7 @@ export default class Main extends React.Component {
     const notes = Object.keys(keys);
     return (
       <div id="main">
-        <Sketch color={this.state.color} />
+        <Sketch color={this.state.color} segment={this.state.segment} />
         <div
           className="instrument"
           onKeyDown={this.keyHandler}

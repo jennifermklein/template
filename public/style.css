@@ -1,10 +1,10 @@
 body {
-    background-color: whitesmoke;
+    background-color: #f5f5f5;
     text-align: center;
 }
 
 .white {
-    background-color: ivory;
+    background-color: white;
     color: black;
     height: 200px;
     width: 40px;
@@ -13,7 +13,7 @@ body {
 
 .black {
     background-color: black;
-    color: ivory;
+    color: white;
     height: 150px;
     width: 36px;
     margin: 0px -18px 0px -18px;
@@ -41,6 +41,8 @@ button:focus {
 .instrument {
     display: flex;
     justify-content: center;
+    align-content: center;
+    padding: 10px;
 }
 
 main {
