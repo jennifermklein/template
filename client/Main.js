@@ -116,6 +116,9 @@ export default class Main extends React.Component {
     return (
       <div id="main">
         <Sketch color={this.state.color} segment={this.state.segment} />
+        <div id="title">
+          <h1>stalactite</h1>
+        </div>
         <div
           className="instrument"
           onKeyDown={this.keyHandler}

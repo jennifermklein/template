@@ -5,14 +5,14 @@ body {
 
 .white {
     background-color: white;
-    color: black;
+    color: rgb(18,18, 18);
     height: 200px;
     width: 40px;
     z-index: 2;
 }
 
 .black {
-    background-color: black;
+    background-color: rgb(18,18, 18);
     color: white;
     height: 150px;
     width: 36px;
@@ -48,10 +48,23 @@ button:focus {
 main {
     display:flex;
     justify-content: center;
+    
 }
+
 canvas {
     width: 100%;
     position: absolute;
     top: 0;
     left: 0;
+}
+
+#title {
+    position: relative;
+    margin-top: 25px;
+}
+
+h1 {
+    font-family: 'Stalinist One', cursive;
+    margin: 0;
+    color: rgb(18,18, 18);
 }
