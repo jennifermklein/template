@@ -16,7 +16,7 @@ export default class Sketch extends React.Component {
 
     const width = paper.view.size.width;
     const height = paper.view.size.height;
-    const amt = 20;
+    const amt = 22;
     const step = width / (amt - 1);
 
     const line = new paper.Path({
@@ -26,7 +26,7 @@ export default class Sketch extends React.Component {
     });
 
     for (let i = 0; i < amt; i++) {
-      line.add(new paper.Point(i * step, Math.random() * height * 0.6));
+      line.add(new paper.Point(i * step, 0));
     }
 
     line.smooth();
@@ -41,32 +41,32 @@ export default class Sketch extends React.Component {
       const newShape = this.state.shape;
       const color = this.props.color;
       newShape.strokeColor = color;
-      newShape.fillColor = "white";
+      newShape.fillColor = color;
 
       const width = paper.view.size.width;
       const height = paper.view.size.height;
-      const amt = 20;
+      const amt = 22;
       const step = width / (amt - 1);
 
-      const i = this.props.segment;
+      const i = this.props.segment + 1;
       const y = newShape.segments[i].point._y;
-      const transform = Math.random() * 80 - 40;
-      const newY = Math.max(height * 0.3, Math.min(height * 7, y + transform));
+      const transform = Math.random() * 10;
+      const newY = Math.max(height * 0.1, Math.min(height * 7, y + transform));
       if (newShape && newShape.segments[i]) {
         newShape.segments[i].point = [i * step, newY];
-        const circle = new paper.Path.Circle(
-          new paper.Point(
-            newShape.segments[i].point._x + transform / 2,
-            newShape.segments[i].point._y
-          ),
-          9
-        );
-        circle.fillColor = color;
-        (circle.shadowColor = new paper.Color(0, 0, 0)),
-          // Set the shadow blur radius to 12:
-          (circle.shadowBlur = 3),
-          // Offset the shadow by { x: 5, y: 5 }
-          (circle.shadowOffset = new paper.Point(1, 1));
+        // const circle = new paper.Path.Circle(
+        //   new paper.Point(
+        //     newShape.segments[i].point._x + transform / 2,
+        //     newShape.segments[i].point._y
+        //   ),
+        //   9
+        // );
+        // circle.fillColor = color;
+        // (circle.shadowColor = new paper.Color(0, 0, 0)),
+        //   // Set the shadow blur radius to 12:
+        //   (circle.shadowBlur = 3),
+        //   // Offset the shadow by { x: 5, y: 5 }
+        //   (circle.shadowOffset = new paper.Point(1, 1));
       }
 
       newShape.smooth();
