@@ -67,4 +67,5 @@ h1 {
     font-family: 'Stalinist One', cursive;
     margin: 0;
     color: rgb(18,18, 18);
+    text-shadow: 1px 1px 1px white;
 }
